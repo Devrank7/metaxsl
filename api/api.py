@@ -16,17 +16,19 @@ class Operation(ABC):
 
 class ExifToolOperation(Operation):
 
-    def __init__(self, name: str, type_file: str, file_path: str, output_dir: str, exif_data: dict[str, str]):
+    def __init__(self, exif_tool: str, name: str, type_file: str, file_path: str, output_dir: str,
+                 exif_data: dict[str, str]):
         self.file_path = file_path
         self.output_dir = output_dir
         self.exif_data = exif_data
         self.name = name
         self.type_file = type_file
+        self.exif_tool = exif_tool
 
     def do(self):
         output_file_path = os.path.join(self.output_dir, self.name + '.' + self.type_file)
         print("Output file path: {}".format(output_file_path))
-        command = [r"F:/Downloads/exiftool-13.02_64/exiftool.exe"]
+        command = [self.exif_tool]
         for k, v in self.exif_data.items():
             add_f = f"{k}=" + v
             print(add_f)
@@ -59,8 +61,9 @@ class ExcelOperationExif(Operation):
 
 
 class ExifOperationExif(Operation):
-    def __init__(self, csv_path: str):
+    def __init__(self, exif_tool: str, csv_path: str):
         self.csv_path = csv_path
+        self.exif_tool = exif_tool
 
     def do(self):
         result = ExcelOperationExif(self.csv_path).do()
@@ -77,7 +80,7 @@ class ExifOperationExif(Operation):
                     }
                     conv = convert_getter[t]()
                     print(conv)
-                    ExifToolOperation(res['name'], t, input_file, res['path'],
+                    ExifToolOperation(self.exif_tool, res['name'], t, input_file, res['path'],
                                       convert_to_exif_tool_data(exif_data, conv)).do()
                 else:
                     print("Not found exif file: in ", input_file)
