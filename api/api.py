@@ -5,7 +5,7 @@ from abc import ABC, abstractmethod
 
 import piexif
 
-from api.convert import convert_to_exif_tool_data, convert_getter
+from .convert import convert_to_exif_tool_data, convert_getter
 
 
 class Operation(ABC):

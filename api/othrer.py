@@ -3,7 +3,7 @@ import os
 import piexif
 from PIL import Image
 
-from api.image import Operation
+from .api import Operation
 
 
 class ImgOperationExif(Operation):
